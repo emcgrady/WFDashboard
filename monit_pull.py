@@ -1,18 +1,15 @@
 from rucio.client.client import Client
 from CMSSpark.osearch import osearch
+from pandas import DataFrame
+from getpass import getpass
+from pycurl import Curl
+from json import loads
 from io import BytesIO
 from tqdm import tqdm
-
-import pandas as pd
-import numpy as np
-
-import getpass
-import pycurl
-import json
-import time
+from time import time
 
 client  = Client()
-timestamp = time.time()
+timestamp = time()
 
 states = [
     'new',
@@ -35,7 +32,7 @@ states = [
 
 credentials = {'cert': '/afs/cern.ch/user/c/chmcgrad/.globus/usercert.pem',
                    'key':  '/afs/cern.ch/user/c/chmcgrad/.globus/userkey.pem',
-                   'password': getpass.getpass()
+                   'password': getpass()
               }
 
 def get_index_schema():
@@ -81,7 +78,7 @@ def pull():
     c.close()
     body = buffer.getvalue()
     body = body.decode('iso-8859-1')
-    return json.loads(body)['result']
+    return loads(body)['result']
 
 def sum_data(name, InLocks, OutLocks):
     uni      = []
@@ -112,7 +109,7 @@ def df_builder(start):
                'InputDataset', 
                'OutputDatasets']
 
-    df = pd.DataFrame(index=start.index, columns = columns)
+    df = DataFrame(index=start.index, columns = columns)
 
     for i, row in tqdm(df.iterrows(), total=len(df), unit='wf'):
         row.RequestName = start.RequestName.iloc[i]
@@ -185,7 +182,7 @@ def build_docs(df):
 
 def main(): 
     #####NEED NEW CREDITIALS LINE####
-    start = pd.DataFrame(pull())
+    start = DataFrame(pull())
     df = df_builder(start)
     docs = build_docs(df)
         
