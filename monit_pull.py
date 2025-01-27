@@ -30,6 +30,7 @@ states = [
     'force-complete',
 ]
 
+#####NEED NEW CREDITIALS LINE####
 credentials = {'cert': '/afs/cern.ch/user/c/chmcgrad/.globus/usercert.pem',
                    'key':  '/afs/cern.ch/user/c/chmcgrad/.globus/userkey.pem',
                    'password': getpass()
@@ -181,7 +182,6 @@ def build_docs(df):
     return docs
 
 def main(): 
-    #####NEED NEW CREDITIALS LINE####
     start = DataFrame(pull())
     df = df_builder(start)
     docs = build_docs(df)
