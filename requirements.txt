@@ -1,5 +1,3 @@
--e git+https://github.com/dmwm/CMSSpark.git@b8efa0ac5cb57b617ee8d1ea9bb26d53fb0443b0#egg=CMSSpark&subdirectory=src/python
-
 pandas==2.1.2
 pycurl==7.45.3
 rucio-clients==32.5.0
