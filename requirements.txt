@@ -1,5 +1,0 @@
-pandas==2.1.2
-pycurl==7.45.3
-rucio-clients==32.5.0
-tqdm==4.66.1
-opensearch-py==2.6.0
