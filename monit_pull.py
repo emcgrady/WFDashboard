@@ -8,6 +8,9 @@ from io import BytesIO
 from tqdm import tqdm
 from time import time
 
+import os 
+import pwd
+
 client  = Client()
 timestamp = time()
 
@@ -30,11 +33,22 @@ states = [
     'force-complete',
 ]
 
-#####NEED NEW CREDITIALS LINE####
-credentials = {'cert': '/afs/cern.ch/user/c/chmcgrad/.globus/usercert.pem',
-                   'key':  '/afs/cern.ch/user/c/chmcgrad/.globus/userkey.pem',
-                   'password': getpass()
-              }
+def getX509():
+    "Helper function to get x509 from env or tmp file"
+    proxy = os.environ.get('X509_USER_PROXY', '')
+    if proxy: 
+        return proxy, proxy
+    else: 
+        proxy = '/tmp/x509up_u%s' % pwd.getpwuid(os.getuid()).pw_uid
+        if os.path.isfile(proxy):
+            else return proxy, proxy
+        else: 
+            certFile = os.environ.get('X509_USER_CERT', '')
+            keyFile = os.environ.get('X509_USER_KEY', '')
+            if certFile and keyFile:
+                return certFile, keyFile
+            else: 
+                return '', ''
 
 def get_index_schema():
     return {
@@ -62,17 +76,18 @@ def pull():
               'OriginalRequestName'
              ]
     mask = ''
+    cert, key = getX509()
     for param in params: 
         mask = f'{mask}&mask={param}'
     link   = f'https://cmsweb.cern.ch/wmstatsserver/data/filtered_requests?{mask}'
     buffer = BytesIO()
-    c      = pycurl.Curl()
+    c      = Curl()
     c.setopt(c.URL, link)
     c.setopt(c.WRITEDATA, buffer)
     c.setopt(c.CAINFO, None)
-    c.setopt(c.SSLCERT, credentials['cert'])
-    c.setopt(c.SSLKEY,  credentials['key'])
-    c.setopt(c.SSLKEYPASSWD, credentials['password'])
+    c.setopt(c.SSLCERT, cert)
+    c.setopt(c.SSLKEY,  key)
+    #c.setopt(c.SSLKEYPASSWD, credentials['password'])
     c.setopt(c.WRITEDATA, buffer)
     c.setopt(c.SSL_VERIFYPEER, False)
     c.perform()
@@ -188,7 +203,7 @@ def main():
         
     _index_template = 'test-wfs'
     client = osearch.get_es_client("os-cms.cern.ch/os", 'secret_opensearch.txt', get_index_schema())
-    idx = client.get_or_create_index(timestamp=time.time(), index_template=_index_template, index_mod="d")
+    idx = client.get_or_create_index(timestamp=time(), index_template=_index_template, index_mod="d")
     
     for doc in docs: 
         client.send(idx, doc, metadata=None, batch_size=10000, drop_nulls=False)
