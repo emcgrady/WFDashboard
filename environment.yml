@@ -1,0 +1,10 @@
+name: wfdashboard
+channels:
+  - conda-forge
+dependencies:
+  - conda-forge::python=3.10.12
+  - conda-forge::opensearch-py
+  - pandas
+  - pycurl
+  - rucio-clients
+  - tqdm
