@@ -1,5 +1,5 @@
 from rucio.client.client import Client
-from CMSSpark.osearch import osearch
+from osearch import osearch
 from pandas import DataFrame
 from getpass import getpass
 from pycurl import Curl
@@ -41,7 +41,7 @@ def getX509():
     else: 
         proxy = '/tmp/x509up_u%s' % pwd.getpwuid(os.getuid()).pw_uid
         if os.path.isfile(proxy):
-            else return proxy, proxy
+            return proxy, proxy
         else: 
             certFile = os.environ.get('X509_USER_CERT', '')
             keyFile = os.environ.get('X509_USER_KEY', '')
@@ -87,7 +87,6 @@ def pull():
     c.setopt(c.CAINFO, None)
     c.setopt(c.SSLCERT, cert)
     c.setopt(c.SSLKEY,  key)
-    #c.setopt(c.SSLKEYPASSWD, credentials['password'])
     c.setopt(c.WRITEDATA, buffer)
     c.setopt(c.SSL_VERIFYPEER, False)
     c.perform()
