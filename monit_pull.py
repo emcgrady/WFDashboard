@@ -1,5 +1,5 @@
 from rucio.client.client import Client
-from CMSSpark.osearch import osearch
+from osearch import osearch
 from pandas import DataFrame
 from getpass import getpass
 from pycurl import Curl
