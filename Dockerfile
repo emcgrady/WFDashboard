@@ -19,4 +19,4 @@ RUN pip install -r $(pwd)/CMSSpark/requirements.txt
 RUN export PYTHONPATH="${PYTHONPATH}:$(pwd)/CMSSpark/src/python/CMSSpark"
 ADD monit_pull.py $WDIR
 RUN chmod +x monit_pull.py
-ENTRYPOINT ["python", "monit_pull.py"]
+ENTRYPOINT ["python3", "monit_pull.py"]
