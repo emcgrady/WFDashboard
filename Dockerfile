@@ -15,8 +15,8 @@ RUN dnf search openssh
 RUN dnf -y install git
 RUN git clone https://github.com/emcgrady/WFDashboard.git
 RUN git clone https://github.com/dmwm/CMSSpark.git
-RUN pip install -r $(pwd)/CMSSpark/requirements.txt
-ENV PYTHONPATH="${PYTHONPATH}:$(pwd)/CMSSpark/src/python/CMSSpark/osearch"
+RUN pip install -r CMSSpark/requirements.txt
+ENV PYTHONPATH="${PYTHONPATH}:CMSSpark/src/python/CMSSpark/osearch"
 ADD monit_pull.py $WDIR
 RUN chmod +x monit_pull.py
 ENTRYPOINT ["python3", "monit_pull.py"]
