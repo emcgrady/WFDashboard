@@ -13,4 +13,5 @@ RUN pip install -r CMSSpark/requirements.txt
 ENV PYTHONPATH="${PYTHONPATH}:CMSSpark/src/python/CMSSpark"
 ADD monit_pull.py $WDIR
 RUN chmod +x monit_pull.py
+RUN cp rucio.cfg /opt/rucio/etc/rucio.cfg
 ENTRYPOINT ["python3", "monit_pull.py"]
